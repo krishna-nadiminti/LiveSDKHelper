@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Reflection;
 
 namespace LiveSDKHelper
 {
@@ -6,9 +8,9 @@ namespace LiveSDKHelper
     {
         internal static T GetAttribute<T>(this Enum value) where T : Attribute
         {
-            var fieldInfo = value.GetType().GetField(value.ToString());
+            var fieldInfo = value.GetType().GetTypeInfo().GetDeclaredField(value.ToString());
 
-            var attributes = fieldInfo == null ? null : fieldInfo.GetCustomAttributes(typeof(T), false);
+            var attributes = fieldInfo == null ? null : fieldInfo.GetCustomAttributes(typeof(T), false).ToArray();
 
             if (attributes == null || attributes.Length == 0) { return null; }
 
